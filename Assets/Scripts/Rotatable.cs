@@ -12,7 +12,7 @@ public class Rotatable : MonoBehaviour
     private Vector2 rotation;
     private Transform myCamera;
 
-    // Start is called before the first frame update
+
     private void Awake()
     {
         pressed.Enable();
@@ -23,7 +23,7 @@ public class Rotatable : MonoBehaviour
         axis.performed += context => { rotation = context.ReadValue<Vector2>(); };
     }
 
-    // Update is called once per frame
+ 
     private IEnumerator Rotate()
     {
         rotateAllowed = true;
