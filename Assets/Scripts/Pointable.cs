@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class Pointable : MonoBehaviour
 {
     [SerializeField] private InputAction pressed;
+    [SerializeField] private GameObject clickPoint;
 
     private bool pointDone;
     private Camera myCamera;
@@ -37,6 +38,7 @@ public class Pointable : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.gameObject == gameObject)
             {
                 print(hit.point);
+                clickPoint.transform.position = hit.point;
             }
             yield return null;
         }
