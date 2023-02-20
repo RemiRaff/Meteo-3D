@@ -13,6 +13,7 @@ public class Pointable : MonoBehaviour
     private bool pointDone;
     private Camera myCamera;
     private Vector2 mousePos;
+    private float longitude, latitude;
     
     private void Awake()
     {
@@ -40,7 +41,10 @@ public class Pointable : MonoBehaviour
             {
                 clickPoint.transform.position = hit.point;
                 Vector3 lPos = transform.InverseTransformPoint(clickPoint.transform.position); // Vector3 wPos = transform.TransformPoint(lPos);
-                print(Mathf.Atan2(lPos.z, lPos.x)); // Mathf.Atan2(lPos.y, lPos.x)
+                longitude = Mathf.Atan(lPos.z/lPos.x)*180/Mathf.PI; // convertion en degrès, les axes sont à modifier
+                latitude = 90 - Mathf.Acos(lPos.y/Mathf.Sqrt(lPos.x*lPos.x + lPos.y*lPos.y + lPos.z*lPos.z))*180/Mathf.PI;
+
+                print(latitude + " : " + longitude);
             }
             yield return null;
         }
