@@ -8,6 +8,7 @@ public class Pointable : MonoBehaviour
 {
     [SerializeField] private InputAction pressed;
     [SerializeField] private GameObject clickPoint;
+    [SerializeField] private GameObject pointableObject;
 
     private bool pointDone;
     private Camera myCamera;
@@ -26,7 +27,7 @@ public class Pointable : MonoBehaviour
     private IEnumerator Pointer()
     {
         pointDone = true;
-        
+
         while (pointDone)
         {
             mousePos = Mouse.current.position.ReadValue();
@@ -35,10 +36,11 @@ public class Pointable : MonoBehaviour
             Ray ray = myCamera.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, myCamera.nearClipPlane));
             // print("Bouton pressed, ray casted");
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.gameObject == gameObject)
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity) && hit.collider.gameObject == pointableObject)
             {
-                print(hit.point);
                 clickPoint.transform.position = hit.point;
+                Vector3 lPos = transform.InverseTransformPoint(clickPoint.transform.position); // Vector3 wPos = transform.TransformPoint(lPos);
+                print(Mathf.Atan2(lPos.z, lPos.x)); // Mathf.Atan2(lPos.y, lPos.x)
             }
             yield return null;
         }
