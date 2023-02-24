@@ -2641,6 +2641,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db122db2f83c2d409aea56246a7aca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  latitude: 0
+  longitude: 0
+  ville: 
+  country: {fileID: 977657708}
+  description: {fileID: 121580941}
+  feels_like: {fileID: 1147838441}
+  humidity: {fileID: 71915833}
+  location: {fileID: 708897380}
+  mainWeather: {fileID: 612353033}
+  pressure: {fileID: 1222156451}
+  temp: {fileID: 1236988891}
+  temp_max: {fileID: 1160828127}
+  temp_min: {fileID: 125076195}
+  visibility: {fileID: 1424873942}
+  windspeed: {fileID: 1690617924}
+  windsOrientation: {fileID: 1055289457}
   key: 
 --- !u!4 &1047509126
 Transform:
@@ -4338,6 +4354,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ca80b1b9b584f645b738dd8f30ebd33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PointSelected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1047509125}
+        m_TargetAssemblyTypeName: OpenWeatherController, Assembly-CSharp
+        m_MethodName: GetLatLong
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   pressed:
     m_Name: Pressed
     m_Type: 1
@@ -4357,6 +4388,8 @@ MonoBehaviour:
     m_Flags: 0
   clickPoint: {fileID: 519495780}
   pointableObject: {fileID: 1343668400}
+  latitude: 0
+  longitude: 0
 --- !u!114 &2076075783
 MonoBehaviour:
   m_ObjectHideFlags: 0
