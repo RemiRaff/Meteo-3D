@@ -1,68 +1,77 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class FromCurrentForecastweather
-{ 
- /*     From : Visual Studio Special Paste
-        to use => Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
- */
+{
+    /*     From : Visual Studio Special Paste
+           to use => Rootobject myDeserializedClass = JsonUtility.FromJson<Rootobject>(jsonStrings);
+           example : description.text = "Météo actuelle: \n" + myDeserializedClass.weather[0].description;
+    */
+
+    [System.Serializable]
     public class Rootobject
     {
-        public Coord coord { get; set; }
-        public Weather[] weather { get; set; }
-        public string @base { get; set; }
-        public Main main { get; set; }
-        public int visibility { get; set; }
-        public Wind wind { get; set; }
-        public Clouds clouds { get; set; }
-        public int dt { get; set; }
-        public Sys sys { get; set; }
-        public int timezone { get; set; }
-        public int id { get; set; }
-        public string name { get; set; }
-        public int cod { get; set; }
+        public Coord coord;
+        public Weather[] weather;
+        public string @base;
+        public Main main;
+        public int visibility;
+        public Wind wind;
+        public Clouds clouds;
+        public int dt;
+        public Sys sys;
+        public int timezone;
+        public int id;
+        public string name;
+        public int cod;
     }
 
+    [System.Serializable]
     public class Coord
     {
-        public float lon { get; set; }
-        public float lat { get; set; }
+        public float lon;
+        public float lat;
     }
 
+    [System.Serializable]
     public class Main
     {
-        public float temp { get; set; }
-        public float feels_like { get; set; }
-        public float temp_min { get; set; }
-        public float temp_max { get; set; }
-        public int pressure { get; set; }
-        public int humidity { get; set; }
+        public float temp;
+        public float feels_like;
+        public float temp_min;
+        public float temp_max;
+        public int pressure;
+        public int humidity;
     }
 
+    [System.Serializable]
     public class Wind
     {
-        public float speed { get; set; }
-        public int deg { get; set; }
+        public float speed;
+        public int deg;
     }
 
+    [System.Serializable]
     public class Clouds
     {
-        public int all { get; set; }
+        public int all;
     }
 
+    [System.Serializable]
     public class Sys
     {
-        public int type { get; set; }
-        public int id { get; set; }
-        public string country { get; set; }
-        public int sunrise { get; set; }
-        public int sunset { get; set; }
+        public int type;
+        public int id;
+        public string country;
+        public int sunrise;
+        public int sunset;
     }
 
+    [System.Serializable]
     public class Weather
     {
-        public int id { get; set; }
-        public string main { get; set; }
-        public string description { get; set; }
-        public string icon { get; set; }
+        public int id;
+        public string main;
+        public string description;
+        public string icon;
     }
 }

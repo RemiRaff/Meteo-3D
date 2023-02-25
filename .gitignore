@@ -13,6 +13,7 @@
 .vsconfig
 *.unitypackage
 *.zip
+OpenWeatherAPI
 OpenWeatherKey.json
 OpenWeatherKey.json.meta
 current_Forecast_weather_received.json
