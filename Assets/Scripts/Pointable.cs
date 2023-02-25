@@ -14,21 +14,20 @@ public class Pointable : MonoBehaviour
 
     [SerializeField] float latitude;
     [SerializeField] float longitude;
-        
-    private bool  pointDone;
+
+    private bool pointDone;
 
     private Camera myCamera;
     private Vector2 mousePos;
-    
+
     private void Awake()
     {
         pressed.Enable();
         myCamera = Camera.main;
-        
+
         pressed.performed += _ => { StartCoroutine(Pointer()); };
         pressed.canceled += _ => { pointDone = false; };
     }
-
 
     private IEnumerator Pointer()
     {
@@ -46,8 +45,8 @@ public class Pointable : MonoBehaviour
             {
                 clickPoint.transform.position = hit.point;
                 Vector3 lPos = transform.InverseTransformPoint(clickPoint.transform.position); // Vector3 wPos = transform.TransformPoint(lPos);
-                longitude = Mathf.Atan(lPos.z/lPos.x)*180/Mathf.PI; // convertion en degrès, les axes sont à modifier
-                latitude = 90 - Mathf.Acos(lPos.y/Mathf.Sqrt(lPos.x*lPos.x + lPos.y*lPos.y + lPos.z*lPos.z))*180/Mathf.PI;
+                longitude = Mathf.Atan(lPos.z / lPos.x) * 180 / Mathf.PI; // conversion en degrÃ©s, les axes sont Ã  modifier
+                latitude = 90 - Mathf.Acos(lPos.y / Mathf.Sqrt(lPos.x * lPos.x + lPos.y * lPos.y + lPos.z * lPos.z)) * 180 / Mathf.PI;
                 PointSelected.Invoke(new Vector2(latitude, longitude));
             }
             yield return null;

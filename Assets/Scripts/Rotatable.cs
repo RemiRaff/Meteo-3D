@@ -11,7 +11,6 @@ public class Rotatable : MonoBehaviour
     private Vector2 rotation;
     private Transform myCamera;
 
-
     private void Awake()
     {
         pressed.Enable();
@@ -22,11 +21,11 @@ public class Rotatable : MonoBehaviour
         axis.performed += context => { rotation = context.ReadValue<Vector2>(); };
     }
 
- 
+
     private IEnumerator Rotate()
     {
         rotateAllowed = true;
-        
+
         while (rotateAllowed)
         {
             rotation *= speed;
