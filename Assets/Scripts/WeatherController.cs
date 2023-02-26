@@ -9,10 +9,6 @@ using File = System.IO.File;
 using Unity.VisualScripting;
 using static System.Net.WebRequestMethods;
 
-using static Choix_CurrentWeather;
-using static Choix_LocationWeather;
-using static ChoixForecast5Days;
-
 public class WeatherController : MonoBehaviour
 {
     // [SerializeField] Pointable _pointable; // Permet de récupérer datas ou méthodes from script "Pointable"
@@ -178,106 +174,105 @@ public class WeatherController : MonoBehaviour
             if (choix == Choix_CurrentWeather)
             {
                 Debug.Log("infos Choix_CurrentWeather : " + choix);
-                Choix_CurrentWeather.Rootobject myDeserializedClass = JsonUtility.FromJson<Choix_CurrentWeather.Rootobject>(jsonStrings);
-                //Debug.Log("FromCurrentForecastweather function, longitude = \n" + myDeserializedClass.coord.lon);
-                //Debug.Log("FromCurrentForecastweather function, latitude = \n" + myDeserializedClass.coord.lat);
-                //Debug.Log("FromCurrentForecastweather function, Weather ID = \n" + myDeserializedClass.weather[0].id);
-                //Debug.Log("FromCurrentForecastweather function, Weather main = \n" + myDeserializedClass.weather[0].main);
-                //Debug.Log("FromCurrentForecastweather function, Weather description = \n" + myDeserializedClass.weather[0].description);
-                //Debug.Log("FromCurrentForecastweather function, Weather Icon = \n" + myDeserializedClass.weather[0].icon);
-                //Debug.Log("FromCurrentForecastweather function, base = \n" + myDeserializedClass.@base);
-                //Debug.Log("FromCurrentForecastweather function, temp = \n" + myDeserializedClass.main.temp);
-                //Debug.Log("FromCurrentForecastweather function, feels Like = \n" + myDeserializedClass.main.feels_like);
-                //Debug.Log("FromCurrentForecastweather function, temp_min = \n" + myDeserializedClass.main.temp_min);
-                //Debug.Log("FromCurrentForecastweather function, temp_max = \n" + myDeserializedClass.main.temp_max);
-                //Debug.Log("FromCurrentForecastweather function, pressure = \n" + myDeserializedClass.main.pressure);
-                //Debug.Log("FromCurrentForecastweather function, humidity = \n" + myDeserializedClass.main.humidity);
-                //Debug.Log("FromCurrentForecastweather function, Visibilit� = \n" + myDeserializedClass.visibility);
-                //Debug.Log("FromCurrentForecastweather function, Wind Speed = \n" + myDeserializedClass.wind.speed);
-                //Debug.Log("FromCurrentForecastweather function, Wind deg = \n" + myDeserializedClass.wind.deg);
-                //Debug.Log("FromCurrentForecastweather function, Couverture Clouds = \n" + myDeserializedClass.clouds.all);
-                //Debug.Log("FromCurrentForecastweather function, Time of data calculation dt = \n" + myDeserializedClass.dt);
-                //Debug.Log("FromCurrentForecastweather function, sys Type = \n" + myDeserializedClass.sys.type);
-                //Debug.Log("FromCurrentForecastweather function, sys ID = \n" + myDeserializedClass.sys.id);
-                //Debug.Log("FromCurrentForecastweather function, Country code = \n" + myDeserializedClass.sys.country);
-                //Debug.Log("FromCurrentForecastweather function, sunrise = \n" + myDeserializedClass.sys.sunrise);
-                //Debug.Log("FromCurrentForecastweather function, sunset = \n" + myDeserializedClass.sys.sunset);
-                //Debug.Log("FromCurrentForecastweather function, Shift in seconds from UTC TimeZone = \n" + myDeserializedClass.timezone);
-                //Debug.Log("FromCurrentForecastweather function, ID = \n" + myDeserializedClass.id);
-                //Debug.Log("FromCurrentForecastweather function, location = \n" + myDeserializedClass.name);
-                //Debug.Log("FromCurrentForecastweather function, cod = \n" + myDeserializedClass.cod);
+                Choix_CurrentWeather.Rootobject CurrentWeatherClass = JsonUtility.FromJson<Choix_CurrentWeather.Rootobject>(jsonStrings);
+                //Debug.Log("FromCurrentForecastweather function, longitude = \n" + CurrentWeatherClass.coord.lon);
+                //Debug.Log("FromCurrentForecastweather function, latitude = \n" + CurrentWeatherClass.coord.lat);
+                //Debug.Log("FromCurrentForecastweather function, Weather ID = \n" + CurrentWeatherClass.weather[0].id);
+                //Debug.Log("FromCurrentForecastweather function, Weather main = \n" + CurrentWeatherClass.weather[0].main);
+                //Debug.Log("FromCurrentForecastweather function, Weather description = \n" + CurrentWeatherClass.weather[0].description);
+                //Debug.Log("FromCurrentForecastweather function, Weather Icon = \n" + CurrentWeatherClass.weather[0].icon);
+                //Debug.Log("FromCurrentForecastweather function, base = \n" + CurrentWeatherClass.@base);
+                //Debug.Log("FromCurrentForecastweather function, temp = \n" + CurrentWeatherClass.main.temp);
+                //Debug.Log("FromCurrentForecastweather function, feels Like = \n" + CurrentWeatherClass.main.feels_like);
+                //Debug.Log("FromCurrentForecastweather function, temp_min = \n" + CurrentWeatherClass.main.temp_min);
+                //Debug.Log("FromCurrentForecastweather function, temp_max = \n" + CurrentWeatherClass.main.temp_max);
+                //Debug.Log("FromCurrentForecastweather function, pressure = \n" + CurrentWeatherClass.main.pressure);
+                //Debug.Log("FromCurrentForecastweather function, humidity = \n" + CurrentWeatherClass.main.humidity);
+                //Debug.Log("FromCurrentForecastweather function, Visibilit� = \n" + CurrentWeatherClass.visibility);
+                //Debug.Log("FromCurrentForecastweather function, Wind Speed = \n" + CurrentWeatherClass.wind.speed);
+                //Debug.Log("FromCurrentForecastweather function, Wind deg = \n" + CurrentWeatherClass.wind.deg);
+                //Debug.Log("FromCurrentForecastweather function, Couverture Clouds = \n" + CurrentWeatherClass.clouds.all);
+                //Debug.Log("FromCurrentForecastweather function, Time of data calculation dt = \n" + CurrentWeatherClass.dt);
+                //Debug.Log("FromCurrentForecastweather function, sys Type = \n" + CurrentWeatherClass.sys.type);
+                //Debug.Log("FromCurrentForecastweather function, sys ID = \n" + CurrentWeatherClass.sys.id);
+                //Debug.Log("FromCurrentForecastweather function, Country code = \n" + CurrentWeatherClass.sys.country);
+                //Debug.Log("FromCurrentForecastweather function, sunrise = \n" + CurrentWeatherClass.sys.sunrise);
+                //Debug.Log("FromCurrentForecastweather function, sunset = \n" + CurrentWeatherClass.sys.sunset);
+                //Debug.Log("FromCurrentForecastweather function, Shift in seconds from UTC TimeZone = \n" + CurrentWeatherClass.timezone);
+                //Debug.Log("FromCurrentForecastweather function, ID = \n" + CurrentWeatherClass.id);
+                //Debug.Log("FromCurrentForecastweather function, location = \n" + CurrentWeatherClass.name);
+                //Debug.Log("FromCurrentForecastweather function, cod = \n" + CurrentWeatherClass.cod);
 
-                description.text = "Météo actuelle: \n" + myDeserializedClass.weather[0].description;
-                temp.text = "Température actuelle :\n" + Mathf.Floor(myDeserializedClass.main.temp) + "C°";
-                location.text = "Lieu :\n" + myDeserializedClass.name;
-                country.text = "Pays :\n" + myDeserializedClass.sys.country;
-                mainWeather.text = "A définir :\n" + myDeserializedClass.weather[0].main;
-                feels_like.text = "Température ressentie :\n" + myDeserializedClass.main.feels_like + " C°";
-                temp_min.text = "Température mini :\n" + myDeserializedClass.main.temp_min + " C°";
-                temp_max.text = "Température max :\n" + myDeserializedClass.main.temp_max + " C°";
-                pressure.text = "Pression :\n" + myDeserializedClass.main.pressure + " hPa";
-                humidity.text = "Humidité :\n" + myDeserializedClass.main.humidity + " %";
-                windspeed.text = "Vitesse vent :\n" + myDeserializedClass.wind.speed + " Km/h";
-                windsOrientation.text = "Orientation vent :\n" + myDeserializedClass.wind.deg + " degré";
-                visibility.text = "Visibilité :\n" + myDeserializedClass.visibility + " mètres";
+                description.text = "Météo actuelle: \n" + CurrentWeatherClass.weather[0].description;
+                temp.text = "Température actuelle :\n" + Mathf.Floor(CurrentWeatherClass.main.temp) + "C°";
+                location.text = "Lieu :\n" + CurrentWeatherClass.name;
+                country.text = "Pays :\n" + CurrentWeatherClass.sys.country;
+                mainWeather.text = "A définir :\n" + CurrentWeatherClass.weather[0].main;
+                feels_like.text = "Température ressentie :\n" + CurrentWeatherClass.main.feels_like + " C°";
+                temp_min.text = "Température mini :\n" + CurrentWeatherClass.main.temp_min + " C°";
+                temp_max.text = "Température max :\n" + CurrentWeatherClass.main.temp_max + " C°";
+                pressure.text = "Pression :\n" + CurrentWeatherClass.main.pressure + " hPa";
+                humidity.text = "Humidité :\n" + CurrentWeatherClass.main.humidity + " %";
+                windspeed.text = "Vitesse vent :\n" + CurrentWeatherClass.wind.speed + " Km/h";
+                windsOrientation.text = "Orientation vent :\n" + CurrentWeatherClass.wind.deg + " degré";
+                visibility.text = "Visibilité :\n" + CurrentWeatherClass.visibility + " mètres";
             }
             else
             {
                 if (choix == Choix_ForecastWeather5days)
                 {
                     Debug.Log("infos Choix_ForecastWeather5days : " + choix);
-                    ChoixForecast5Days.Rootobject my_DeserializedClass = JsonUtility.FromJson<ChoixForecast5Days.Rootobject>(jsonStrings);
-                    Debug.Log("FromCurrentForecastweather, Internal parameter = \n" + my_DeserializedClass.cod);
-                    Debug.Log("FromCurrentForecastweather, Internal message = \n" + my_DeserializedClass);
-                    Debug.Log("FromCurrentForecastweather, Cnt (timestamp returned by the API = \n" + my_DeserializedClass.cnt);
-                    Debug.Log("FromCurrentForecastweather, Time of data forecasted, unix, UTC = \n" + my_DeserializedClass.list[0].dt);
-                    Debug.Log("FromCurrentForecastweather, Temperature = \n" + my_DeserializedClass.list[0].main.temp);
-                    Debug.Log("FromCurrentForecastweather, human perception of weather = \n" + my_DeserializedClass.list[0].main.feels_like);
-                    Debug.Log("FromCurrentForecastweather, Minimum temperature at the moment of calculation = \n" + my_DeserializedClass.list[0].main.temp_min);
-                    Debug.Log("FromCurrentForecastweather, Maximum temperature at the moment of calculation = \n" + my_DeserializedClass.list[0].main.temp_max);
-                    Debug.Log("FromCurrentForecastweather, Atmospheric pressure on the sea level by default, hPa = \n" + my_DeserializedClass.list[0].main.pressure);
-                    Debug.Log("FromCurrentForecastweather, Atmospheric pressure on the sea level, hPa = \n" + my_DeserializedClass.list[0].main.sea_level);
-                    Debug.Log("FromCurrentForecastweather, Atmospheric pressure on the ground level, hPa = \n" + my_DeserializedClass.list[0].main.grnd_level);
-                    Debug.Log("FromCurrentForecastweather, Humidity, % = \n" + my_DeserializedClass.list[0].main.humidity);
-                    Debug.Log("FromCurrentForecastweather, Temp_kf (Internal parameter) = \n" + my_DeserializedClass.list[0].main.temp_kf);
-                    Debug.Log("FromCurrentForecastweather, Weather condition id = \n" + my_DeserializedClass.list[0].weather[0].id);
-                    Debug.Log("FromCurrentForecastweather, Group of weather parameters (Rain, Snow, Extreme etc.) = \n" + my_DeserializedClass.list[0].weather[0].main);
-                    Debug.Log("FromCurrentForecastweather, Weather condition within the group = \n" + my_DeserializedClass.list[0].weather[0].description);
-                    Debug.Log("FromCurrentForecastweather, Weather icon id = \n" + my_DeserializedClass.list[0].weather[0].icon);
-                    Debug.Log("FromCurrentForecastweather, Cloudiness, % = \n" + my_DeserializedClass.list[0].clouds.all);
-                    Debug.Log("FromCurrentForecastweather, Wind speed = \n" + my_DeserializedClass.list[0].wind.speed);
-                    Debug.Log("FromCurrentForecastweather, Wind direction, degrees (meteorological) = \n" + my_DeserializedClass.list[0].wind.deg);
-                    Debug.Log("FromCurrentForecastweather, Wind gust = \n" + my_DeserializedClass.list[0].wind.gust);
-                    Debug.Log("FromCurrentForecastweather, Average visibility. The maximum value of the visibility is 10km = \n" + my_DeserializedClass.list[0].visibility);
-                    Debug.Log("FromCurrentForecastweather, Probability of precipitation.\nThe values of the parameter vary\nbetween 0 and 1, \nwhere 0 is equal to 0%, 1 is equal to 100% = \n" + my_DeserializedClass.list[0].pop);
-                    Debug.Log("FromCurrentForecastweather, Rain volume for last 3 hours, mm = \n" + my_DeserializedClass.list[0].rain._3h);
-                    Debug.Log("FromCurrentForecastweather, Part of the day (n - night, d - day)  = \n" + my_DeserializedClass.list[0].sys.pod);
-                    Debug.Log("FromCurrentForecastweather, Time of data forecasted, ISO, UTC  = \n" + my_DeserializedClass.list[0].dt_txt);
-                    Debug.Log("FromCurrentForecastweather, City ID  = \n" + my_DeserializedClass.city.id);
-                    Debug.Log("FromCurrentForecastweather, City name.\nPlease note that built-in geocoder\nfunctionality has been deprecated = \n" + my_DeserializedClass.city.name);
-                    Debug.Log("FromCurrentForecastweather, City geo location, latitude = \n" + my_DeserializedClass.city);
-                    Debug.Log("FromCurrentForecastweather, Country code (GB, JP etc.) = \n" + my_DeserializedClass.city.country);
-                    Debug.Log("FromCurrentForecastweather, City population = \n" + my_DeserializedClass.city.population);
-                    Debug.Log("FromCurrentForecastweather, Shift in seconds from UTC = \n" + my_DeserializedClass.city.timezone);
-                    Debug.Log("FromCurrentForecastweather, Sunrise time, Unix, UTC = \n" + my_DeserializedClass.city.sunrise);
-                    Debug.Log("FromCurrentForecastweather, Sunset time, Unix, UTC = \n" + my_DeserializedClass.city.sunset);
+                    ChoixForecast5Days.Rootobject ForecastWeather5daysClass = JsonUtility.FromJson<ChoixForecast5Days.Rootobject>(jsonStrings);
+                    Debug.Log("FromCurrentForecastweather, Internal parameter = \n" + ForecastWeather5daysClass.cod);
+                    Debug.Log("FromCurrentForecastweather, Internal message = \n" + ForecastWeather5daysClass);
+                    Debug.Log("FromCurrentForecastweather, Cnt (timestamp returned by the API = \n" + ForecastWeather5daysClass.cnt);
+                    Debug.Log("FromCurrentForecastweather, Time of data forecasted, unix, UTC = \n" + ForecastWeather5daysClass.list[0].dt);
+                    Debug.Log("FromCurrentForecastweather, Temperature = \n" + ForecastWeather5daysClass.list[0].main.temp);
+                    Debug.Log("FromCurrentForecastweather, human perception of weather = \n" + ForecastWeather5daysClass.list[0].main.feels_like);
+                    Debug.Log("FromCurrentForecastweather, Minimum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_min);
+                    Debug.Log("FromCurrentForecastweather, Maximum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_max);
+                    Debug.Log("FromCurrentForecastweather, Atmospheric pressure on the sea level by default, hPa = \n" + ForecastWeather5daysClass.list[0].main.pressure);
+                    Debug.Log("FromCurrentForecastweather, Atmospheric pressure on the sea level, hPa = \n" + ForecastWeather5daysClass.list[0].main.sea_level);
+                    Debug.Log("FromCurrentForecastweather, Atmospheric pressure on the ground level, hPa = \n" + ForecastWeather5daysClass.list[0].main.grnd_level);
+                    Debug.Log("FromCurrentForecastweather, Humidity, % = \n" + ForecastWeather5daysClass.list[0].main.humidity);
+                    Debug.Log("FromCurrentForecastweather, Temp_kf (Internal parameter) = \n" + ForecastWeather5daysClass.list[0].main.temp_kf);
+                    Debug.Log("FromCurrentForecastweather, Weather condition id = \n" + ForecastWeather5daysClass.list[0].weather[0].id);
+                    Debug.Log("FromCurrentForecastweather, Group of weather parameters (Rain, Snow, Extreme etc.) = \n" + ForecastWeather5daysClass.list[0].weather[0].main);
+                    Debug.Log("FromCurrentForecastweather, Weather condition within the group = \n" + ForecastWeather5daysClass.list[0].weather[0].description);
+                    Debug.Log("FromCurrentForecastweather, Weather icon id = \n" + ForecastWeather5daysClass.list[0].weather[0].icon);
+                    Debug.Log("FromCurrentForecastweather, Cloudiness, % = \n" + ForecastWeather5daysClass.list[0].clouds.all);
+                    Debug.Log("FromCurrentForecastweather, Wind speed = \n" + ForecastWeather5daysClass.list[0].wind.speed);
+                    Debug.Log("FromCurrentForecastweather, Wind direction, degrees (meteorological) = \n" + ForecastWeather5daysClass.list[0].wind.deg);
+                    Debug.Log("FromCurrentForecastweather, Wind gust = \n" + ForecastWeather5daysClass.list[0].wind.gust);
+                    Debug.Log("FromCurrentForecastweather, Average visibility. The maximum value of the visibility is 10km = \n" + ForecastWeather5daysClass.list[0].visibility);
+                    Debug.Log("FromCurrentForecastweather, Probability of precipitation.\nThe values of the parameter vary\nbetween 0 and 1, \nwhere 0 is equal to 0%, 1 is equal to 100% = \n" + ForecastWeather5daysClass.list[0].pop);
+                    Debug.Log("FromCurrentForecastweather, Rain volume for last 3 hours, mm = \n" + ForecastWeather5daysClass.list[0].rain._3h);
+                    Debug.Log("FromCurrentForecastweather, Part of the day (n - night, d - day)  = \n" + ForecastWeather5daysClass.list[0].sys.pod);
+                    Debug.Log("FromCurrentForecastweather, Time of data forecasted, ISO, UTC  = \n" + ForecastWeather5daysClass.list[0].dt_txt);
+                    Debug.Log("FromCurrentForecastweather, City ID  = \n" + ForecastWeather5daysClass.city.id);
+                    Debug.Log("FromCurrentForecastweather, City name.\nPlease note that built-in geocoder\nfunctionality has been deprecated = \n" + ForecastWeather5daysClass.city.name);
+                    Debug.Log("FromCurrentForecastweather, City geo location, latitude = \n" + ForecastWeather5daysClass.city);
+                    Debug.Log("FromCurrentForecastweather, Country code (GB, JP etc.) = \n" + ForecastWeather5daysClass.city.country);
+                    Debug.Log("FromCurrentForecastweather, City population = \n" + ForecastWeather5daysClass.city.population);
+                    Debug.Log("FromCurrentForecastweather, Shift in seconds from UTC = \n" + ForecastWeather5daysClass.city.timezone);
+                    Debug.Log("FromCurrentForecastweather, Sunrise time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunrise);
+                    Debug.Log("FromCurrentForecastweather, Sunset time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunset);
                 }
             }
             {
                 if (choix == Choix_LocationWeather)
                 {
                     Debug.Log("infos Choix_LocationWeather : " + choix);
-                    Root myDeserializedClass3 = JsonUtility.FromJson<Root>(jsonStrings);
-                    Debug.Log("FromCurrentForecastweather, nom du lieu saisi = \n" + myDeserializedClass3.name);
-                    Debug.Log("FromCurrentForecastweather, latitude du lieu saisi = \n" + myDeserializedClass3.local_names.fr);
-                    Debug.Log("FromCurrentForecastweather, latitude du lieu saisi = \n" + myDeserializedClass3.lat);
-                    Debug.Log("FromCurrentForecastweather, longitude du lieu saisi = \n" + myDeserializedClass3.lon);
-                    Debug.Log("FromCurrentForecastweather, Pays du lieu saisi = \n" + myDeserializedClass3.country);
-                    Debug.Log("FromCurrentForecastweather, l'état du lieu saisi = \n" + myDeserializedClass3.state);
+                    Choix_LocationWeather.Rootobject LocationWeatherClass = JsonUtility.FromJson<Choix_LocationWeather.Rootobject>("{\"Property1\":" + jsonStrings + "}");
+                    //Root myDeserializedClass3 = JsonUtility.FromJson<Root>(jsonStrings);
+                    Debug.Log("FromCurrentForecastweather, nom du lieu saisi = \n" + LocationWeatherClass.Property1[0].name);
+                    Debug.Log("FromCurrentForecastweather, latitude du lieu saisi = \n" + LocationWeatherClass.Property1[0].lat);
+                    Debug.Log("FromCurrentForecastweather, longitude du lieu saisi = \n" + LocationWeatherClass.Property1[0].lon);
+                    Debug.Log("FromCurrentForecastweather, Pays du lieu saisi = \n" + LocationWeatherClass.Property1[0].country);
+                    Debug.Log("FromCurrentForecastweather, l'état du lieu saisi = \n" + LocationWeatherClass.Property1[0].local_names);
                 }
 
             }
-
         }
     }
 
