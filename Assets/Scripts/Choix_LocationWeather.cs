@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-public class Choix_LocationWeather
+﻿public class Choix_LocationWeather
 {
     [System.Serializable]
     public class Rootobject
