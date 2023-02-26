@@ -21,7 +21,6 @@ public class Rotatable : MonoBehaviour
         axis.performed += context => { rotation = context.ReadValue<Vector2>(); };
     }
 
-
     private IEnumerator Rotate()
     {
         rotateAllowed = true;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class FromCurrentForecastweather
+public class Choix_CurrentWeather
 {
     /*     From : Visual Studio Special Paste
            to use => Rootobject myDeserializedClass = JsonUtility.FromJson<Rootobject>(jsonStrings);
