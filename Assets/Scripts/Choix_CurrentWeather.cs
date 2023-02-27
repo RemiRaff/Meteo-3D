@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-public class Choix_CurrentWeather
+﻿public class Choix_CurrentWeather
 {
     /*     From : Visual Studio Special Paste
            to use => Rootobject myDeserializedClass = JsonUtility.FromJson<Rootobject>(jsonStrings);
@@ -19,10 +17,10 @@ public class Choix_CurrentWeather
         public Clouds clouds;
         public int dt;
         public Sys sys;
-        public int timezone;
-        public int id;
-        public string name;
-        public int cod;
+        //public int timezone;
+        //public int id;
+        //public string name;
+        //public int cod;
     }
 
     [System.Serializable]
@@ -41,6 +39,8 @@ public class Choix_CurrentWeather
         public float temp_max;
         public int pressure;
         public int humidity;
+        public int sea_level;
+        public int grnd_level;
     }
 
     [System.Serializable]
@@ -48,6 +48,7 @@ public class Choix_CurrentWeather
     {
         public float speed;
         public int deg;
+        public int gust;
     }
 
     [System.Serializable]
@@ -59,11 +60,14 @@ public class Choix_CurrentWeather
     [System.Serializable]
     public class Sys
     {
-        public int type;
-        public int id;
-        public string country;
         public int sunrise;
         public int sunset;
+        public int timezone;
+        public int id;
+        public int name;
+        public int cod;
+        //public int type;
+        //public string country;
     }
 
     [System.Serializable]
