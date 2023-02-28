@@ -45,7 +45,7 @@ public class Pointable : MonoBehaviour
             {
                 clickPoint.transform.position = hit.point;
                 Vector3 lPos = transform.InverseTransformPoint(clickPoint.transform.position); // Vector3 wPos = transform.TransformPoint(lPos);
-                longitude = Mathf.Atan(lPos.z / lPos.x) * 180 / Mathf.PI; // conversion en degrés, les axes sont à modifier
+                longitude = Mathf.Atan(lPos.z / lPos.x) * Mathf.Rad2Deg; // conversion en degrés, les axes sont à modifier
                 latitude = 90 - Mathf.Acos(lPos.y / Mathf.Sqrt(lPos.x * lPos.x + lPos.y * lPos.y + lPos.z * lPos.z)) * 180 / Mathf.PI;
                 PointSelected.Invoke(new Vector2(latitude, longitude));
             }
