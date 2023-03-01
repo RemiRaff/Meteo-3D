@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Barre de saisie
+  - "Choix m\xE9t\xE9o sur 5 jours"
+  - Validation saisie
+  - "Choix M\xE9t\xE9o actuelle"
+  - UI Current Weather
+  - UI Forecast  Meteo
   layers:
   - Default
   - TransparentFX

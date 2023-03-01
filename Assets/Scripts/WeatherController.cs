@@ -155,7 +155,7 @@ public class WeatherController : MonoBehaviour
                     weatherURL += $"&units=metric";
                     weatherURL += $"&appid={ReadAPIKey()}";
                     Debug.Log("URL à envoyer '" + _choixMeteo.choosenMTO + " :" + weatherURL);
-
+                    _choixMeteo.objectToFind1.gameObject.SetActive(true);
                     StartCoroutine(GetWeather_Informations(weatherURL));
                 }
                 break;
@@ -235,6 +235,7 @@ public class WeatherController : MonoBehaviour
         {
             case "Météo actuelle":
                 {
+                    _choixMeteo.objectToFind1.gameObject.SetActive(true);
                     //Debug.Log("infos Choix_CurrentWeather : " + choix);
                     Choix_CurrentWeather.Rootobject CurrentWeatherClass = JsonUtility.FromJson<Choix_CurrentWeather.Rootobject>(jsonStrings);
                     //Debug.Log("Choix_CurrentWeather function, longitude = \n" + CurrentWeatherClass.coord.lon);
@@ -286,6 +287,7 @@ public class WeatherController : MonoBehaviour
                 break;
             case "Météo sur 5 jours":
                 {
+                    _choixMeteo.objectToFind2.gameObject.SetActive(true);
                     //Debug.Log("infos Choix_ForecastWeather5days : " + choix);
                     ChoixForecast5Days.Rootobject ForecastWeather5daysClass = JsonUtility.FromJson<ChoixForecast5Days.Rootobject>(jsonStrings);
                     Debug.Log("Choix_ForecastWeather5days, Internal parameter = \n" + ForecastWeather5daysClass.cod);
