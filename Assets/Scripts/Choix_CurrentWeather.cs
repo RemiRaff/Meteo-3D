@@ -66,8 +66,8 @@
         public int id;
         public int name;
         public int cod;
-        //public int type;
-        //public string country;
+        public int type;
+        public string country;
     }
 
     [System.Serializable]
