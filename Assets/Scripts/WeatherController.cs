@@ -294,65 +294,76 @@ public class WeatherController : MonoBehaviour
                     //Debug.Log("Choix_ForecastWeather5days, Internal parameter = \n" + ForecastWeather5daysClass.cod);
                     //Debug.Log("Choix_ForecastWeather5days, Internal message = \n" + ForecastWeather5daysClass);
                     //Debug.Log("Choix_ForecastWeather5days, Cnt (A number of timestamps, which will be returned in the API response = \n" + ForecastWeather5daysClass.cnt);
+                    
                     //Debug.Log("Choix_ForecastWeather5days, Time of data forecasted, unix, UTC = \n" + ForecastWeather5daysClass.list[0].dt);
-                    //Debug.Log("Choix_ForecastWeather5days, Temperature = \n" + ForecastWeather5daysClass.list[0].main.temp);
-                    //Debug.Log("Choix_ForecastWeather5days, human perception of weather = \n" + ForecastWeather5daysClass.list[0].main.feels_like);
-                    //Debug.Log("Choix_ForecastWeather5days, Minimum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_min);
-                    //Debug.Log("Choix_ForecastWeather5days, Maximum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_max);
-                    //Debug.Log("Choix_ForecastWeather5days, Atmospheric pressure on the sea level by default, hPa = \n" + ForecastWeather5daysClass.list[0].main.pressure);
-                    //Debug.Log("Choix_ForecastWeather5days, Atmospheric pressure on the sea level, hPa = \n" + ForecastWeather5daysClass.list[0].main.sea_level);
-                    //Debug.Log("Choix_ForecastWeather5days, Atmospheric pressure on the ground level, hPa = \n" + ForecastWeather5daysClass.list[0].main.grnd_level);
-                    //Debug.Log("Choix_ForecastWeather5days, Humidity, % = \n" + ForecastWeather5daysClass.list[0].main.humidity);
-                    //Debug.Log("Choix_ForecastWeather5days, Temp_kf (Internal parameter) = \n" + ForecastWeather5daysClass.list[0].main.temp_kf);
-                    //Debug.Log("Choix_ForecastWeather5days, Weather condition id = \n" + ForecastWeather5daysClass.list[0].weather[0].id);
-                    //Debug.Log("Choix_ForecastWeather5days, Group of weather parameters (Rain, Snow, Extreme etc.) = \n" + ForecastWeather5daysClass.list[0].weather[0].main);
-                    //Debug.Log("Choix_ForecastWeather5days, Weather condition within the group = \n" + ForecastWeather5daysClass.list[0].weather[0].description);
-                    //Debug.Log("Choix_ForecastWeather5days, Weather icon id = \n" + ForecastWeather5daysClass.list[0].weather[0].icon);
-                    //Debug.Log("Choix_ForecastWeather5days, Cloudiness, % = \n" + ForecastWeather5daysClass.list[0].clouds.all);
-                    //Debug.Log("Choix_ForecastWeather5days, Wind speed = \n" + ForecastWeather5daysClass.list[0].wind.speed);
-                    //Debug.Log("Choix_ForecastWeather5days, Wind direction, degrees (meteorological) = \n" + ForecastWeather5daysClass.list[0].wind.deg);
-                    //Debug.Log("Choix_ForecastWeather5days, Wind gust = \n" + ForecastWeather5daysClass.list[0].wind.gust);
-                    //Debug.Log("Choix_ForecastWeather5days, Average visibility. The maximum value of the visibility is 10km = \n" + ForecastWeather5daysClass.list[0].visibility);
-                    //Debug.Log("Choix_ForecastWeather5days, Probability of precipitation.\nThe values of the parameter vary\nbetween 0 and 1, \nwhere 0 is equal to 0%, 1 is equal to 100% = \n" + ForecastWeather5daysClass.list[0].pop);
-                    //Debug.Log("Choix_ForecastWeather5days, Rain volume for last 3 hours, mm = \n" + ForecastWeather5daysClass.list[0].rain._3h);
-                    //Debug.Log("Choix_ForecastWeather5days, Part of the day (n - night, d - day)  = \n" + ForecastWeather5daysClass.list[0].sys.pod);
-                    //Debug.Log("Choix_ForecastWeather5days, Time of data forecasted, ISO, UTC  = \n" + ForecastWeather5daysClass.list[0].dt_txt);
-                    //Debug.Log("Choix_ForecastWeather5days, City ID  = \n" + ForecastWeather5daysClass.city.id);
-                    //Debug.Log("Choix_ForecastWeather5days, City name.\nPlease note that built-in geocoder\nfunctionality has been deprecated = \n" + ForecastWeather5daysClass.city.name);
-                    //Debug.Log("Choix_ForecastWeather5days, City geo location = \n" + ForecastWeather5daysClass.city);
-                    //Debug.Log("Choix_ForecastWeather5days, Country code (GB, JP etc.) = \n" + ForecastWeather5daysClass.city.country);
-                    //Debug.Log("Choix_ForecastWeather5days, City population = \n" + ForecastWeather5daysClass.city.population);
-                    //Debug.Log("Choix_ForecastWeather5days, Shift in seconds from UTC = \n" + ForecastWeather5daysClass.city.timezone);
-                    //Debug.Log("Choix_ForecastWeather5days, Sunrise time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunrise);
-                    //Debug.Log("Choix_ForecastWeather5days, Sunset time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunset);
+                    listdt_Time_of_data_forecasted.text = "Time_of_data_forecasted :\n" + (ForecastWeather5daysClass.list[0].dt);
 
+                    //Debug.Log("Choix_ForecastWeather5days, Temperature = \n" + ForecastWeather5daysClass.list[0].main.temp);
                     list_main_temp.text = "Température actuelle :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.temp) + "C°";
 
-                    //city_coord_lon.text = "Longitude : \n" + ForecastWeather5daysClass.coord.lon;
-                    //city_coord_lat.text = "Latitude : \n" + ForecastWeather5daysClass.coord.lat;
-                    weather_description.text = "Météo actuelle: \n" + ForecastWeather5daysClass.weather[0].description;
-                    main_temp.text = "Température actuelle :\n" + Mathf.Floor(ForecastWeather5daysClass.main.temp) + "C°";
-                    visibility.text = "Visibilité :\n" + (ForecastWeather5daysClass.visibility) + "mètres";
-                    main_feels_like.text = "Température ressentie :\n" + ForecastWeather5daysClass.main.feels_like + " C°";
-                    main_temp_min.text = "Température mini :\n" + ForecastWeather5daysClass.main.temp_min + " C°";
-                    main_temp_max.text = "Température max :\n" + ForecastWeather5daysClass.main.temp_max + " C°";
-                    main_pressure.text = "Pression :\n" + ForecastWeather5daysClass.main.pressure + " hPa";
-                    main_humidity.text = "Humidité :\n" + ForecastWeather5daysClass.main.humidity + " %";
-                    wind_speed.text = "Vitesse vent :\n" + ForecastWeather5daysClass.wind.speed + " Km/h";
-                    wind_gust.text = "Vitesse rafale vent :\n" + ForecastWeather5daysClass.wind.gust + " Km/h";
-                    wind_deg.text = "Orientation vent :\n" + ForecastWeather5daysClass.wind.deg + " degré";
-                    main_sea_level.text = "Pression au niveau de la mer :\n" + ForecastWeather5daysClass.main.sea_level + " hPa";
-                    clouds_all.text = "Couverture nuageuse :\n" + ForecastWeather5daysClass.clouds.all + " %";
-                    //rain_1h.text = "Visibilité :\n" + ForecastWeather5daysClass.rain.1h + " mètres";
-                    //sys_sunrise.text = "Levé du soleil :\n" + ForecastWeather5daysClass.sys.sunrise + " UTC";
-                    //sys_sunset.text = "Couché du soleil :\n" + ForecastWeather5daysClass.sys.sunset + " UTC";
-                    //timezone.text = "Visibilité :\n" + ForecastWeather5daysClass.timezone + " UTC";
+                    //Debug.Log("Choix_ForecastWeather5days, human perception of weather = \n" + ForecastWeather5daysClass.list[0].main.feels_like);
+                    list_main_feels_like.text = "Température ressentie :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.feels_like) + "C°";
 
-                    city_name.text = "Température actuelle :\n" + (ForecastWeather5daysClass.city.name) + "C°";
-                    listdt_Time_of_data_forecasted.text = "Time_of_data_forecasted :\n" + (ForecastWeather5daysClass.list[0].dt);
-                    list_main_temp.text = "Température actuelle :\n" + (ForecastWeather5daysClass.list[0].main.temp) + "C°";
-                    list_main_temp.text = "Température actuelle :\n" + (ForecastWeather5daysClass.list[0].main.temp) + "C°";
+                    //Debug.Log("Choix_ForecastWeather5days, Minimum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_min);
+                    list_main_temp_min.text = "Minimum temperature :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.temp_min) + "C°";
 
+                    //Debug.Log("Choix_ForecastWeather5days, Maximum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_max);
+                    list_main_temp_max.text = "Maximum temperature :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.temp_max) + "C°";
+
+                    //Debug.Log("Choix_ForecastWeather5days, Atmospheric pressure on the sea level by default, hPa = \n" + ForecastWeather5daysClass.list[0].main.pressure);
+                    list_main_sea_level.text = "Atmospheric pressure on the sea level by default :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.pressure) + " hPa";
+
+                    //Debug.Log("Choix_ForecastWeather5days, Atmospheric pressure on the ground level, hPa = \n" + ForecastWeather5daysClass.list[0].main.grnd_level);
+                    list_main_pressure.text = "Atmospheric pressure on the ground level by default :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.grnd_level) + " hPa";
+
+                    //Debug.Log("Choix_ForecastWeather5days, Humidity, % = \n" + ForecastWeather5daysClass.list[0].main.humidity);
+                    list_main_humidity.text = "Humidity :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.humidity) + " %";
+
+                    //Debug.Log("Choix_ForecastWeather5days, Temp_kf (Internal parameter) = \n" + ForecastWeather5daysClass.list[0].main.temp_kf);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Weather condition id = \n" + ForecastWeather5daysClass.list[0].weather[0].id);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Group of weather parameters (Rain, Snow, Extreme etc.) = \n" + ForecastWeather5daysClass.list[0].weather[0].main);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Weather condition within the group = \n" + ForecastWeather5daysClass.list[0].weather[0].description);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Weather icon id = \n" + ForecastWeather5daysClass.list[0].weather[0].icon);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Cloudiness, % = \n" + ForecastWeather5daysClass.list[0].clouds.all);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Wind speed = \n" + ForecastWeather5daysClass.list[0].wind.speed);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Wind direction, degrees (meteorological) = \n" + ForecastWeather5daysClass.list[0].wind.deg);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Wind gust = \n" + ForecastWeather5daysClass.list[0].wind.gust);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Average visibility. The maximum value of the visibility is 10km = \n" + ForecastWeather5daysClass.list[0].visibility);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Probability of precipitation.\nThe values of the parameter vary\nbetween 0 and 1, \nwhere 0 is equal to 0%, 1 is equal to 100% = \n" + ForecastWeather5daysClass.list[0].pop);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Rain volume for last 3 hours, mm = \n" + ForecastWeather5daysClass.list[0].rain._3h);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Part of the day (n - night, d - day)  = \n" + ForecastWeather5daysClass.list[0].sys.pod);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Time of data forecasted, ISO, UTC  = \n" + ForecastWeather5daysClass.list[0].dt_txt);
+
+                    //Debug.Log("Choix_ForecastWeather5days, City ID  = \n" + ForecastWeather5daysClass.city.id);
+
+                    //Debug.Log("Choix_ForecastWeather5days, City name.\nPlease note that built-in geocoder\nfunctionality has been deprecated = \n" + ForecastWeather5daysClass.city.name);
+
+                    //Debug.Log("Choix_ForecastWeather5days, City geo location = \n" + ForecastWeather5daysClass.city);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Country code (GB, JP etc.) = \n" + ForecastWeather5daysClass.city.country);
+
+                    //Debug.Log("Choix_ForecastWeather5days, City population = \n" + ForecastWeather5daysClass.city.population);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Shift in seconds from UTC = \n" + ForecastWeather5daysClass.city.timezone);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Sunrise time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunrise);
+
+                    //Debug.Log("Choix_ForecastWeather5days, Sunset time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunset);
+
+                    city_name.text = "Ville :\n" + (ForecastWeather5daysClass.city.name) + "C°";
                 }
                 break;
 
