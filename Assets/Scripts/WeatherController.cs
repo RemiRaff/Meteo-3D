@@ -100,7 +100,8 @@ public class WeatherController : MonoBehaviour
     public TextMeshProUGUI country;
     public TextMeshProUGUI state;
 
-    public string appID_API_key = "", weatherURL = "";
+    public string appID_API_key = "4f74c65ef92d2ac998a5847df7c1c25e";
+    public string weatherURL = "";
 
     private TextMeshProUGUI statusText;
     private const string URL_GetCurrentWeatherData = "http://api.openweathermap.org/data/2.5/weather";
@@ -125,6 +126,9 @@ public class WeatherController : MonoBehaviour
 
     private void Start()
     {
+        // Toggle fullscreen
+        Screen.fullScreen = !Screen.fullScreen;
+
         boutonValidez = GameObject.Find("Validation saisie (Parse JSON Infos) Button").GetComponent<Button>();
         boutonValidez.onClick.AddListener(BoutonValidez);
     }
@@ -133,6 +137,7 @@ public class WeatherController : MonoBehaviour
     {
         //Debug.Log("Button 'Validez' On " + boutonValidez.name);
         Debug.Log("From BoutonValidez, _choixMeteo = " + _choixMeteo.choosenMTO);
+        Debug.Log("From Validez(), appID_API_key = " + appID_API_key);
         ConstructURL2Send();
     }
 
@@ -153,8 +158,11 @@ public class WeatherController : MonoBehaviour
                     weatherURL += $"&lon={longitude}";
                     weatherURL += $"&lang=fr";
                     weatherURL += $"&units=metric";
-                    weatherURL += $"&appid={ReadAPIKey()}";
-                    //Debug.Log("URL à envoyer '" + _choixMeteo.choosenMTO + " :" + weatherURL);
+                    //weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
+                    weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
+                    Debug.Log( "appID_API_key = " + appID_API_key );
+
+                    Debug.Log("URL à envoyer '" + _choixMeteo.choosenMTO + " :" + weatherURL);
                     _choixMeteo.objectToFind1.gameObject.SetActive(true);
                     StartCoroutine(GetWeather_Informations(weatherURL));
                 }
@@ -168,7 +176,10 @@ public class WeatherController : MonoBehaviour
                     weatherURL += $"&lang=fr";
                     weatherURL += $"&units=metric";
                     weatherURL += $"&cnt={timestamps}";
-                    weatherURL += $"&appid={ReadAPIKey()}";
+                    //weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
+                    weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
+                    Debug.Log("appID_API_key = " + appID_API_key);
+
                     Debug.Log("URL à envoyer Choix_ForecastWeather5days : " + weatherURL);
 
                     StartCoroutine(GetWeather_Informations(weatherURL));
@@ -182,7 +193,9 @@ public class WeatherController : MonoBehaviour
                 //        weatherURL += $"&lang=fr";
                 //        weatherURL += $"&units=metric";
                 //        weatherURL += $"&cnt={timestamps}";
-                //        weatherURL += $"&appid={ReadAPIKey()}";
+                //        weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
+                //        weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
+
                 //        Debug.Log("URL à envoyer Choix_ForecastWeather5days : " + weatherURL);
 
                 //        StartCoroutine(GetWeather_Informations(weatherURL));
@@ -212,14 +225,14 @@ public class WeatherController : MonoBehaviour
                     string jsonResults = request.downloadHandler.text;
                     //Debug.Log("From GetWeather_Informations => \nSent requested URL : " + pages[page] + " \nReceived :  \n" + jsonResults);
 
-                    // Ecriture du contenu reçu au format JSON dans un fichier, OK
-                    cheminJSON = Application.streamingAssetsPath + "/current_Forecast_weather_received.json";
+                    //// Ecriture du contenu reçu au format JSON dans un fichier, OK
+                    //cheminJSON = Application.streamingAssetsPath + "/current_Forecast_weather_received.json";
                     jsonStrings = jsonResults;
-                    File.WriteAllText(cheminJSON, jsonStrings);
+                    //File.WriteAllText(cheminJSON, jsonStrings);
 
-                    // Lecture du contenu reçu se trouvant dans le fichier précédemment créé, OK
-                    jsonStrings = File.ReadAllText(cheminJSON);
-                    //Debug.Log("Lecture du fichier MyJSON_File.json : \n" + jsonStrings);
+                    //// Lecture du contenu reçu se trouvant dans le fichier précédemment créé, OK
+                    //jsonStrings = File.ReadAllText(cheminJSON);
+                    ////Debug.Log("Lecture du fichier MyJSON_File.json : \n" + jsonStrings);
                     DisplayMTO();
                 }
             }
@@ -438,13 +451,13 @@ public class WeatherController : MonoBehaviour
     //public TextMeshProUGUI city_sunset;
 
 
-    private string ReadAPIKey()
-    {
-        // Lecture du contenu du fichier contenant la clé API.
-        cheminAppIdAPIkey = Application.streamingAssetsPath + "/OpenWeatherAPI";
-        string appID_API_key = File.ReadAllText(cheminAppIdAPIkey);
-        return appID_API_key;
-    }
+    //private string ReadAPIKey()
+    //{
+    //    // Lecture du contenu du fichier contenant la clé API.
+    //    cheminAppIdAPIkey = Application.streamingAssetsPath + "/OpenWeatherAPI";
+    //    string appID_API_key = File.ReadAllText(cheminAppIdAPIkey);
+    //    return appID_API_key;
+    //}
 
     public void GetLatLong(Vector2 coordLatLong)
     {
