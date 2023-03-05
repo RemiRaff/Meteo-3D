@@ -6,9 +6,10 @@ public class ChoixMeteo : MonoBehaviour
 {
     public WeatherController _weatherController;
     public string choosenMTO;
-    public GameObject objectToFind1, objectToFind2;
+    public GameObject objectToFind1, objectToFind2; //, objectToFind3;
     private const string objectName1 = "UI Current Weather";
     private const string objectName2 = "UI Forecast  Meteo";
+    //private const string objectName3 = "UI Typed Town Name";
 
     private ToggleGroup toggleGroup;
 
@@ -24,14 +25,15 @@ public class ChoixMeteo : MonoBehaviour
 
     private void Awake()
     {
-        // On désactive les deux panneaux d'affichages latéraux.
-        DeactivatebothUI();
+        // On désactive les trois panneaux d'affichages latéraux.
+        DeactivateUI();
     }
 
-    private void DeactivatebothUI()
+    private void DeactivateUI()
     {
         objectToFind1.gameObject.SetActive(false);
         objectToFind2.gameObject.SetActive(false);
+        //objectToFind3.gameObject.SetActive(false);
     }
 
     private void Submit()
@@ -39,7 +41,7 @@ public class ChoixMeteo : MonoBehaviour
         UnityEngine.UI.Toggle toggle = toggleGroup.ActiveToggles().FirstOrDefault();
         choosenMTO = toggle.GetComponentInChildren<Text>().text;
         //Debug.Log("From ChoixMeteo.cs] La MTO choisie à partir du GameObject nommé '" + toggle.name + "' est : " + choosenMTO);
-        DeactivatebothUI();
+        DeactivateUI();
         switch (choosenMTO)
         {
             case "Météo actuelle":
@@ -56,12 +58,12 @@ public class ChoixMeteo : MonoBehaviour
                 }
                 break;
 
-            case "Météo Lieu Saisi": //Still WIP
-                {
-                    //Activer la page d'affichage des données météo reçues correspondantes.
-                    //objectToFind3.gameObject.SetActive(true);
-                }
-                break;
+            //case "Météo Lieu Saisi": //Still WIP
+            //    {
+            //        //Activer la page d'affichage des données météo reçues correspondantes.
+            //        objectToFind3.gameObject.SetActive(true);
+            //    }
+            //    break;
         }
     }
 }

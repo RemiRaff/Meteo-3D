@@ -1,19 +1,17 @@
 using System.Collections;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using Button = UnityEngine.UI.Button;
-using File = System.IO.File;
 
 public class WeatherController : MonoBehaviour
 {
-    private ChoixMeteo _choixMeteo;
 
     [Header("Coordonnées géographiques par défaut")]
     [SerializeField] public float latitude = 43.700936f; // Paris
     [SerializeField] public float longitude = 7.268391f; // Paris
-    [SerializeField] private string ville, cityName, stateCode, countryCode, limit;
-
+    
     [Header("UI Current Weather")]
     public TextMeshProUGUI coord_lon;
     public TextMeshProUGUI coord_lat;
@@ -100,15 +98,15 @@ public class WeatherController : MonoBehaviour
     public TextMeshProUGUI country;
     public TextMeshProUGUI state;
 
-    public string appID_API_key = "4f74c65ef92d2ac998a5847df7c1c25e";
+    [Header("UI Other useful Informations")]
+    public string appID_API_key = "4f74c65ef92d2ac998a5847df7c1c25e"; // ne devait pas figurer ici en clair mais dans un fichier dans 'streamingAssetsPath' à cause de WebGL
     public string weatherURL = "";
 
     private TextMeshProUGUI statusText;
     private const string URL_GetCurrentWeatherData = "http://api.openweathermap.org/data/2.5/weather";
     private const string URL_ForecastWeather5days = "http://api.openweathermap.org/data/2.5/forecast?lat=";
     private const string URL_fetch_Coordinates_by_location_name = "http://api.openweathermap.org/geo/1.0/direct?q=";
-    //private string fetch_By_zip_post_code = "http://api.openweathermap.org/geo/1.0/zip?zip={zip code},{country code}&appid={API key}";
-    //string getWeatherIcon = "http://openweathermap.org/img/w/" + myDeserializedClass.weather[0].icon + ".png";
+    //string getWeatherIcon = "http://openweathermap.org/img/w/" + myDeserializedClass.weather[0].icon + ".png";        WIP
 
     // from "https://openweathermap.org/api/geocoding-api#reverse"
     //private string reverse_geocoding = "http://api.openweathermap.org/geo/1.0/reverse?lat={lat}&lon={lon}&limit={limit}&appid={API key}";
@@ -117,6 +115,13 @@ public class WeatherController : MonoBehaviour
     private int timestamps = 3;
     private Button boutonValidez;
     private UnityEngine.UI.Toggle toggleChoixMétéoactuelle, toggleChoixmétéo5jours;
+    private string texteSaisi = "";
+    private bool texteSaisiVraiouFaux = false;
+    private int compteur = 0;
+    private ChoixMeteo _choixMeteo;
+
+    [SerializeField] private string latitude5daysForecast = "", longitude5daysForecast = "";
+    [SerializeField] private string ville, cityName, stateCode, countryCode, limit;
 
     private void Awake()
     {
@@ -128,17 +133,30 @@ public class WeatherController : MonoBehaviour
     {
         // Toggle fullscreen
         Screen.fullScreen = !Screen.fullScreen;
-
         boutonValidez = GameObject.Find("Validation saisie (Parse JSON Infos) Button").GetComponent<Button>();
         boutonValidez.onClick.AddListener(BoutonValidez);
     }
 
     private void BoutonValidez()
     {
-        //Debug.Log("Button 'Validez' On " + boutonValidez.name);
-        Debug.Log("From BoutonValidez, _choixMeteo = " + _choixMeteo.choosenMTO);
-        Debug.Log("From Validez(), appID_API_key = " + appID_API_key);
-        ConstructURL2Send();
+        ConstructURL2Send(latitude5daysForecast, longitude5daysForecast, compteur);
+    }
+
+    public void ReadInput(string input) // Lecture de la ville saisie
+    {
+        texteSaisi = input;
+        if (string.IsNullOrEmpty(input))
+        {
+            // OKprint("Texte saisi vide ");
+            texteSaisiVraiouFaux = false;
+            return;
+        }
+        else
+        {
+            print("Texte saisi = " + texteSaisi); // OK
+            texteSaisiVraiouFaux = true;
+            return;
+        }
     }
 
     private void OnDisable()
@@ -147,68 +165,111 @@ public class WeatherController : MonoBehaviour
         Debug.Log("RemovedListener(BoutonValidez) désactivé");
     }
 
-    private void ConstructURL2Send()
+    public void ConstructURL2Send(string latitude5daysForecast, string longitude5daysForecast, int compteur)
     {
+        //Debug.Log("From ConstructURL2Send() case (0) longitude5daysForecast = " + longitude5daysForecast);
+        //Debug.Log("From ConstructURL2Send() case (0) latitude5daysForecast = " + latgitude5daysForecast);
+
         switch (_choixMeteo.choosenMTO)
         {
             case "Météo actuelle":
                 {
-                    weatherURL = URL_GetCurrentWeatherData;
-                    weatherURL += $"?lat={latitude}";
-                    weatherURL += $"&lon={longitude}";
-                    weatherURL += $"&lang=fr";
-                    weatherURL += $"&units=metric";
-                    //weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
-                    weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
-                    Debug.Log( "appID_API_key = " + appID_API_key );
+                    if (texteSaisiVraiouFaux == false) // Aucune ville n'est saisie dans la fenêtre !
+                    {
+                        weatherURL = URL_GetCurrentWeatherData;
+                        weatherURL += $"?lat={latitude}"; // (Latitude et longitude) sont récupérées à partir de la position cliquéee sur la Map Monde.
+                        weatherURL += $"&lon={longitude}";
+                        weatherURL += $"&lang=fr";
+                        weatherURL += $"&units=metric";
+                        //weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
+                        weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
 
-                    Debug.Log("URL à envoyer '" + _choixMeteo.choosenMTO + " :" + weatherURL);
-                    _choixMeteo.objectToFind1.gameObject.SetActive(true);
-                    StartCoroutine(GetWeather_Informations(weatherURL));
+                        //Debug.Log("URL à envoyer '" + _choixMeteo.choosenMTO + " :" + weatherURL);
+                        _choixMeteo.objectToFind1.gameObject.SetActive(true);
+                        StartCoroutine(GetWeather_Informations(weatherURL));
+                    }
+                    else // Le nom d'une ville a été saisi !
+                    {
+                        //https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}     URL dépréciée mais toujours fonctionnelle
+
+                        weatherURL = URL_GetCurrentWeatherData;
+                        weatherURL += $"?q={texteSaisi}";
+                        weatherURL += $"&lang=fr";
+                        weatherURL += $"&units=metric";
+                        //weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
+                        weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
+                        Debug.Log("URL à envoyer avec nom ville " + _choixMeteo.choosenMTO + " :" + weatherURL); // OK
+                        _choixMeteo.objectToFind1.gameObject.SetActive(true);
+                        StartCoroutine(GetWeather_Informations(weatherURL));
+                    }
                 }
                 break;
 
             case "Météo sur 5 jours":
                 {
-                    string weatherURL = URL_ForecastWeather5days;
-                    weatherURL += $"{latitude}";
-                    weatherURL += $"&lon={longitude}";
-                    weatherURL += $"&lang=fr";
-                    weatherURL += $"&units=metric";
-                    weatherURL += $"&cnt={timestamps}";
-                    //weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
-                    weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
-                    Debug.Log("appID_API_key = " + appID_API_key);
+                    if (texteSaisiVraiouFaux == false) // Aucune ville n'est saisie dans la fenêtre !
+                    {
+                        string weatherURL = URL_ForecastWeather5days;
+                        weatherURL += $"{latitude}"; // (Latitude et longitude) sont récupérées à partir de la position cliquéee sur la Map Monde.
+                        weatherURL += $"&lon={longitude}";
+                        weatherURL += $"&lang=fr";
+                        weatherURL += $"&units=metric";
+                        weatherURL += $"&cnt={timestamps}";
+                        //weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
+                        weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
 
-                    Debug.Log("URL à envoyer Choix_ForecastWeather5days : " + weatherURL);
+                        //Debug.Log("URL à envoyer Choix_ForecastWeather5days : " + weatherURL);
+                        _choixMeteo.objectToFind2.gameObject.SetActive(true);
+                        StartCoroutine(GetWeather_Informations(weatherURL));
+                    }
+                    else // Le nom d'une ville a été saisi | texteSaisiVraiouFaux == true
+                    {
+                        Debug.Log("From ConstructURL2Send() \"Météo sur 5 jours \" 'Compteur' = " + compteur);
+                        switch (compteur)
+                        {
+                            case 0:
+                                {
+                                    //https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}     URL dépréciée mais toujours fonctionnelle
 
-                    StartCoroutine(GetWeather_Informations(weatherURL));
+                                    weatherURL = URL_GetCurrentWeatherData;
+                                    weatherURL += $"?q={texteSaisi}";
+                                    weatherURL += $"&lang=fr";
+                                    weatherURL += $"&units=metric";
+                                    //weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
+                                    weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
+                                    Debug.Log("URL à envoyer la première fois avec nom ville from Météo 5 jours " + _choixMeteo.choosenMTO + " :" + weatherURL); // OK
+                                    StartCoroutine(GetWeather_Informations(weatherURL));
+                                }
+                                break;
+                            case 1:
+                                {
+                                    Debug.Log("From ConstructURL2Send() case (1) longitude5daysForecast = " + longitude5daysForecast);
+                                    Debug.Log("From ConstructURL2Send() case (1) latitude5daysForecast = " + latitude5daysForecast);
+
+                                    string weatherURL = URL_ForecastWeather5days;
+                                    weatherURL += $"{latitude5daysForecast}"; // (Latitude et longitude) sont récupérées à partir de la seconde requète UnityWebRequest.
+                                    weatherURL += $"&lon={longitude5daysForecast}";
+                                    weatherURL += $"&lang=fr";
+                                    weatherURL += $"&units=metric";
+                                    weatherURL += $"&cnt={timestamps}";
+                                    //weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
+                                    weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
+                                    Debug.Log("URL à envoyer la seconde fois avec nom ville from Météo 5 jours " + _choixMeteo.choosenMTO + " :" + weatherURL); // OK
+                                    //Debug.Log("URL à envoyer Choix_ForecastWeather5days : " + weatherURL);
+                                    _choixMeteo.objectToFind2.gameObject.SetActive(true);
+                                    StartCoroutine(GetWeather_Informations(weatherURL));
+                                }
+                                break;
+                        }
+                    }
                 }
                 break;
-                //case "Météo Lieu Saisi":
-                //    {
-                //        string weatherURL = URL_ForecastWeather5days;
-                //        weatherURL += $"{latitude}";
-                //        weatherURL += $"&lon={longitude}";
-                //        weatherURL += $"&lang=fr";
-                //        weatherURL += $"&units=metric";
-                //        weatherURL += $"&cnt={timestamps}";
-                //        weatherURL += $"&appid={ReadAPIKey()}"; // Works OK but deactivated because issue with WebGl
-                //        weatherURL += $"&appid=4f74c65ef92d2ac998a5847df7c1c25e";
-
-                //        Debug.Log("URL à envoyer Choix_ForecastWeather5days : " + weatherURL);
-
-                //        StartCoroutine(GetWeather_Informations(weatherURL));
-                //    }
-                //    break;
         }
     }
 
-    //fetchWeatherRequest.Dispose();
-
     private IEnumerator GetWeather_Informations(string url2use)
     {
-        Debug.Log("Inside GetWeather_Informations, URL à envoyer : url2use = " + url2use);
+        Debug.Log("Inside GetWeather_Informations, URL effectivement envoyée : url2use = " + url2use);
 
         // attempt to retrieve the Weather data
         using (UnityWebRequest request = UnityWebRequest.Get(url2use))
@@ -225,14 +286,14 @@ public class WeatherController : MonoBehaviour
                     string jsonResults = request.downloadHandler.text;
                     //Debug.Log("From GetWeather_Informations => \nSent requested URL : " + pages[page] + " \nReceived :  \n" + jsonResults);
 
-                    //// Ecriture du contenu reçu au format JSON dans un fichier, OK
+                    // Ecriture du contenu reçu au format JSON dans un fichier, OK
                     //cheminJSON = Application.streamingAssetsPath + "/current_Forecast_weather_received.json";
                     jsonStrings = jsonResults;
                     //File.WriteAllText(cheminJSON, jsonStrings);
 
-                    //// Lecture du contenu reçu se trouvant dans le fichier précédemment créé, OK
+                    // Lecture du contenu reçu se trouvant dans le fichier précédemment créé, OK
                     //jsonStrings = File.ReadAllText(cheminJSON);
-                    ////Debug.Log("Lecture du fichier MyJSON_File.json : \n" + jsonStrings);
+                    Debug.Log("Lecture du fichier MyJSON_File.json : \n" + jsonStrings);
                     DisplayMTO();
                 }
             }
@@ -243,7 +304,7 @@ public class WeatherController : MonoBehaviour
         }
     }
 
-    private void DisplayMTO()
+    public void DisplayMTO()
     {
         switch (_choixMeteo.choosenMTO)
         {
@@ -304,152 +365,149 @@ public class WeatherController : MonoBehaviour
 
             case "Météo sur 5 jours":
                 {
-                    _choixMeteo.objectToFind2.gameObject.SetActive(true);
-                    ChoixForecast5Days.Rootobject ForecastWeather5daysClass = JsonUtility.FromJson<ChoixForecast5Days.Rootobject>(jsonStrings);
-                    //Debug.Log("Choix_ForecastWeather5days, Internal parameter = \n" + ForecastWeather5daysClass.cod);
-                    //Debug.Log("Choix_ForecastWeather5days, Internal message = \n" + ForecastWeather5daysClass);
-                    //Debug.Log("Choix_ForecastWeather5days, Cnt (A number of timestamps, which will be returned in the API response = \n" + ForecastWeather5daysClass.cnt);
-                    
-                    //Debug.Log("Choix_ForecastWeather5days, Time of data forecasted, unix, UTC = \n" + ForecastWeather5daysClass.list[0].dt);
-                    //listdt_Time_of_data_forecasted.text = "Time_of_data_forecasted :\n" + (ForecastWeather5daysClass.list[0].dt);
+                    if (texteSaisiVraiouFaux == false) // Aucune ville n'est saisie dans la fenêtre !
+                    {
+                        _choixMeteo.objectToFind2.gameObject.SetActive(true);
+                        ChoixForecast5Days.Rootobject ForecastWeather5daysClass = JsonUtility.FromJson<ChoixForecast5Days.Rootobject>(jsonStrings);
+                        //Debug.Log("Choix_ForecastWeather5days, Internal parameter = \n" + ForecastWeather5daysClass.cod);
+                        //Debug.Log("Choix_ForecastWeather5days, Internal message = \n" + ForecastWeather5daysClass);
+                        //Debug.Log("Choix_ForecastWeather5days, Cnt (A number of timestamps, which will be returned in the API response = \n" + ForecastWeather5daysClass.cnt);
 
-                    //Debug.Log("Choix_ForecastWeather5days, Temperature = \n" + ForecastWeather5daysClass.list[0].main.temp);
-                    list_main_temp.text = "Température actuelle :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.temp) + "C°";
+                        //Debug.Log("Choix_ForecastWeather5days, Time of data forecasted, unix, UTC = \n" + ForecastWeather5daysClass.list[0].dt);
+                        //listdt_Time_of_data_forecasted.text = "Time_of_data_forecasted :\n" + (ForecastWeather5daysClass.list[0].dt);
 
-                    //Debug.Log("Choix_ForecastWeather5days, human perception of weather = \n" + ForecastWeather5daysClass.list[0].main.feels_like);
-                    list_main_feels_like.text = "Température ressentie :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.feels_like) + "C°";
+                        //Debug.Log("Choix_ForecastWeather5days, Temperature = \n" + ForecastWeather5daysClass.list[0].main.temp);
+                        list_main_temp.text = "Température actuelle :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.temp) + "C°";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Minimum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_min);
-                    list_main_temp_min.text = "Minimum temperature :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.temp_min) + "C°";
+                        //Debug.Log("Choix_ForecastWeather5days, human perception of weather = \n" + ForecastWeather5daysClass.list[0].main.feels_like);
+                        list_main_feels_like.text = "Température ressentie :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.feels_like) + "C°";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Maximum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_max);
-                    list_main_temp_max.text = "Maximum temperature :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.temp_max) + "C°";
+                        //Debug.Log("Choix_ForecastWeather5days, Minimum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_min);
+                        list_main_temp_min.text = "Minimum temperature :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.temp_min) + "C°";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Atmospheric pressure on the sea level by default, hPa = \n" + ForecastWeather5daysClass.list[0].main.pressure);
-                    list_main_sea_level.text = "Atmospheric pressure on the sea level by default :\n" + (ForecastWeather5daysClass.list[0].main.pressure) + " hPa";
+                        //Debug.Log("Choix_ForecastWeather5days, Maximum temperature at the moment of calculation = \n" + ForecastWeather5daysClass.list[0].main.temp_max);
+                        list_main_temp_max.text = "Maximum temperature :\n" + Mathf.Floor(ForecastWeather5daysClass.list[0].main.temp_max) + "C°";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Atmospheric pressure on the ground level, hPa = \n" + ForecastWeather5daysClass.list[0].main.grnd_level);
-                    list_main_pressure.text = "Atmospheric pressure on the ground level by default :\n" + (ForecastWeather5daysClass.list[0].main.grnd_level) + " hPa";
+                        //Debug.Log("Choix_ForecastWeather5days, Atmospheric pressure on the sea level by default, hPa = \n" + ForecastWeather5daysClass.list[0].main.pressure);
+                        list_main_sea_level.text = "Atmospheric pressure on the sea level by default :\n" + (ForecastWeather5daysClass.list[0].main.pressure) + " hPa";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Humidity, % = \n" + ForecastWeather5daysClass.list[0].main.humidity);
-                    list_main_humidity.text = "Humidity :\n" + ForecastWeather5daysClass.list[0].main.humidity + " %";
+                        //Debug.Log("Choix_ForecastWeather5days, Atmospheric pressure on the ground level, hPa = \n" + ForecastWeather5daysClass.list[0].main.grnd_level);
+                        list_main_pressure.text = "Atmospheric pressure on the ground level by default :\n" + (ForecastWeather5daysClass.list[0].main.grnd_level) + " hPa";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Temp_kf (Internal parameter) = \n" + ForecastWeather5daysClass.list[0].main.temp_kf);
-                    //list_main_temp_kf.text = "Temp_kf :\n" + ForecastWeather5daysClass.list[0].main.temp_kf + " %";
+                        //Debug.Log("Choix_ForecastWeather5days, Humidity, % = \n" + ForecastWeather5daysClass.list[0].main.humidity);
+                        list_main_humidity.text = "Humidity :\n" + ForecastWeather5daysClass.list[0].main.humidity + " %";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Weather condition id = \n" + ForecastWeather5daysClass.list[0].weather[0].id);
+                        //Debug.Log("Choix_ForecastWeather5days, Temp_kf (Internal parameter) = \n" + ForecastWeather5daysClass.list[0].main.temp_kf);
+                        //list_main_temp_kf.text = "Temp_kf :\n" + ForecastWeather5daysClass.list[0].main.temp_kf + " %";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Group of weather parameters (Rain, Snow, Extreme etc.) = \n" + ForecastWeather5daysClass.list[0].weather[0].main);
-                    list_weather_main.text = "Weather condition :\n" + ForecastWeather5daysClass.list[0].weather[0].main;
+                        //Debug.Log("Choix_ForecastWeather5days, Weather condition id = \n" + ForecastWeather5daysClass.list[0].weather[0].id);
 
-                    //Debug.Log("Choix_ForecastWeather5days, Weather condition within the group = \n" + ForecastWeather5daysClass.list[0].weather[0].description);
-                    list_weather_description.text = "Weather condition :\n" + ForecastWeather5daysClass.list[0].weather[0].description;
+                        //Debug.Log("Choix_ForecastWeather5days, Group of weather parameters (Rain, Snow, Extreme etc.) = \n" + ForecastWeather5daysClass.list[0].weather[0].main);
+                        list_weather_main.text = "Weather condition :\n" + ForecastWeather5daysClass.list[0].weather[0].main;
 
-                    //Debug.Log("Choix_ForecastWeather5days, Weather icon id = \n" + ForecastWeather5daysClass.list[0].weather[0].icon);
+                        //Debug.Log("Choix_ForecastWeather5days, Weather condition within the group = \n" + ForecastWeather5daysClass.list[0].weather[0].description);
+                        list_weather_description.text = "Weather condition :\n" + ForecastWeather5daysClass.list[0].weather[0].description;
 
-                    //Debug.Log("Choix_ForecastWeather5days, Cloudiness, % = \n" + ForecastWeather5daysClass.list[0].clouds.all);
+                        //Debug.Log("Choix_ForecastWeather5days, Weather icon id = \n" + ForecastWeather5daysClass.list[0].weather[0].icon);
 
-                    //Debug.Log("Choix_ForecastWeather5days, Wind speed = \n" + ForecastWeather5daysClass.list[0].wind.speed);
-                    list_wind_speed.text = "Wind speed :\n" + ForecastWeather5daysClass.list[0].wind.speed + " km/h";
+                        //Debug.Log("Choix_ForecastWeather5days, Cloudiness, % = \n" + ForecastWeather5daysClass.list[0].clouds.all);
 
-                    //Debug.Log("Choix_ForecastWeather5days, Wind direction, degrees (meteorological) = \n" + ForecastWeather5daysClass.list[0].wind.deg);
-                    list_wind_deg.text = "Wind direction :\n" + ForecastWeather5daysClass.list[0].wind.deg + " °C";
+                        //Debug.Log("Choix_ForecastWeather5days, Wind speed = \n" + ForecastWeather5daysClass.list[0].wind.speed);
+                        list_wind_speed.text = "Wind speed :\n" + ForecastWeather5daysClass.list[0].wind.speed + " km/h";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Wind gust = \n" + ForecastWeather5daysClass.list[0].wind.gust);
-                    list_wind_gust.text = "Wind gust :\n" + ForecastWeather5daysClass.list[0].wind.gust + " km/h";
+                        //Debug.Log("Choix_ForecastWeather5days, Wind direction, degrees (meteorological) = \n" + ForecastWeather5daysClass.list[0].wind.deg);
+                        list_wind_deg.text = "Wind direction :\n" + ForecastWeather5daysClass.list[0].wind.deg + " °C";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Average visibility. The maximum value of the visibility is 10km = \n" + ForecastWeather5daysClass.list[0].visibility);
-                    list_visibility.text = "Average visibility :\n" + ForecastWeather5daysClass.list[0].visibility + " meters";
+                        //Debug.Log("Choix_ForecastWeather5days, Wind gust = \n" + ForecastWeather5daysClass.list[0].wind.gust);
+                        list_wind_gust.text = "Wind gust :\n" + ForecastWeather5daysClass.list[0].wind.gust + " km/h";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Probability of precipitation.\nThe values of the parameter vary\nbetween 0 and 1, \nwhere 0 is equal to 0%, 1 is equal to 100% = \n" + ForecastWeather5daysClass.list[0].pop);
-                    //list_pop.text = "Probability of precipitation :\n" + ForecastWeather5daysClass.list[0].pop;
+                        //Debug.Log("Choix_ForecastWeather5days, Average visibility. The maximum value of the visibility is 10km = \n" + ForecastWeather5daysClass.list[0].visibility);
+                        list_visibility.text = "Average visibility :\n" + ForecastWeather5daysClass.list[0].visibility + " meters";
 
-                    //Debug.Log("Choix_ForecastWeather5days, Rain volume for last 3 hours, mm = \n" + ForecastWeather5daysClass.list[0].rain._3h);
-                    //list_rain_3h.text = "Rain volume for last 3 hours :\n" + ForecastWeather5daysClass.list[0].rain._3h;
+                        //Debug.Log("Choix_ForecastWeather5days, Probability of precipitation.\nThe values of the parameter vary\nbetween 0 and 1, \nwhere 0 is equal to 0%, 1 is equal to 100% = \n" + ForecastWeather5daysClass.list[0].pop);
+                        //list_pop.text = "Probability of precipitation :\n" + ForecastWeather5daysClass.list[0].pop;
 
-                    //Debug.Log("Choix_ForecastWeather5days, Part of the day (n - night, d - day)  = \n" + ForecastWeather5daysClass.list[0].sys.pod);
-                    //list_sys_pod.text = "Part of the day :\n" + ForecastWeather5daysClass.list[0].sys.pod;
+                        //Debug.Log("Choix_ForecastWeather5days, Rain volume for last 3 hours, mm = \n" + ForecastWeather5daysClass.list[0].rain._3h);
+                        //list_rain_3h.text = "Rain volume for last 3 hours :\n" + ForecastWeather5daysClass.list[0].rain._3h;
 
-                    //Debug.Log("Choix_ForecastWeather5days, Time of data forecasted, ISO, UTC  = \n" + ForecastWeather5daysClass.list[0].dt_txt);
-                    listdt_Time_of_data_forecasted.text = "Time of data forecasted :\n" + ForecastWeather5daysClass.list[0].dt_txt;
+                        //Debug.Log("Choix_ForecastWeather5days, Part of the day (n - night, d - day)  = \n" + ForecastWeather5daysClass.list[0].sys.pod);
+                        //list_sys_pod.text = "Part of the day :\n" + ForecastWeather5daysClass.list[0].sys.pod;
 
-                    //Debug.Log("Choix_ForecastWeather5days, City ID  = \n" + ForecastWeather5daysClass.city.id);
+                        //Debug.Log("Choix_ForecastWeather5days, Time of data forecasted, ISO, UTC  = \n" + ForecastWeather5daysClass.list[0].dt_txt);
+                        listdt_Time_of_data_forecasted.text = "Time of data forecasted :\n" + ForecastWeather5daysClass.list[0].dt_txt;
 
-                    //Debug.Log("Choix_ForecastWeather5days, City name.\nPlease note that built-in geocoder\nfunctionality has been deprecated = \n" + ForecastWeather5daysClass.city.name);
-                    city_name.text = "Ville :\n" + (ForecastWeather5daysClass.city.name);
+                        //Debug.Log("Choix_ForecastWeather5days, City ID  = \n" + ForecastWeather5daysClass.city.id);
 
-                    //Debug.Log("Choix_ForecastWeather5days, City geo location = \n" + ForecastWeather5daysClass.city);
+                        //Debug.Log("Choix_ForecastWeather5days, City name.\nPlease note that built-in geocoder\nfunctionality has been deprecated = \n" + ForecastWeather5daysClass.city.name);
+                        city_name.text = "Ville :\n" + (ForecastWeather5daysClass.city.name);
 
-                    //Debug.Log("Choix_ForecastWeather5days, Country code (GB, JP etc.) = \n" + ForecastWeather5daysClass.city.country);
-                    city_country.text = "Country code :\n" + ForecastWeather5daysClass.city.country;
+                        //Debug.Log("Choix_ForecastWeather5days, City geo location = \n" + ForecastWeather5daysClass.city);
 
-                    //Debug.Log("Choix_ForecastWeather5days, City population = \n" + ForecastWeather5daysClass.city.population);
-                    //city_population.text = "City population :\n" + ForecastWeather5daysClass.city.population;
+                        //Debug.Log("Choix_ForecastWeather5days, Country code (GB, JP etc.) = \n" + ForecastWeather5daysClass.city.country);
+                        city_country.text = "Country code :\n" + ForecastWeather5daysClass.city.country;
 
-                    //Debug.Log("Choix_ForecastWeather5days, Shift in seconds from UTC = \n" + ForecastWeather5daysClass.city.timezone);
+                        //Debug.Log("Choix_ForecastWeather5days, City population = \n" + ForecastWeather5daysClass.city.population);
+                        //city_population.text = "City population :\n" + ForecastWeather5daysClass.city.population;
 
-                    //Debug.Log("Choix_ForecastWeather5days, Sunrise time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunrise);
-                    //city_sunrise.text = "Sunrise time :\n" + ForecastWeather5daysClass.city.sunrise;
+                        //Debug.Log("Choix_ForecastWeather5days, Shift in seconds from UTC = \n" + ForecastWeather5daysClass.city.timezone);
 
-                    //Debug.Log("Choix_ForecastWeather5days, Sunset time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunset);
-                    //city_sunset.text = "Sunset time :\n" + ForecastWeather5daysClass.city.sunset;
+                        //Debug.Log("Choix_ForecastWeather5days, Sunrise time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunrise);
+                        //city_sunrise.text = "Sunrise time :\n" + ForecastWeather5daysClass.city.sunrise;
 
-                    //Debug.Log("Choix_ForecastWeather5days, City Name = \n" + ForecastWeather5daysClass.city.name);
-                }
-                break;
+                        //Debug.Log("Choix_ForecastWeather5days, Sunset time, Unix, UTC = \n" + ForecastWeather5daysClass.city.sunset);
+                        //city_sunset.text = "Sunset time :\n" + ForecastWeather5daysClass.city.sunset;
 
-            case "Météo Lieu Saisi":
-                {
-                    // _choixMeteo.objectToFind3.gameObject.SetActive(true);
-                    // Debug.Log("infos Choix_LocationWeather : " + choix);
-                    // Choix_LocationWeather.Rootobject LocationWeatherClass = JsonUtility.FromJson<Choix_LocationWeather.Rootobject>("{\"Property1\":" + jsonStrings + "}");
-                    // Debug.Log("Choix_LocationWeather, nom du lieu saisi = \n" + LocationWeatherClass.Property1[0].name);
-                    // Debug.Log("Choix_LocationWeather, latitude du lieu saisi = \n" + LocationWeatherClass.Property1[0].lat);
-                    // Debug.Log("Choix_LocationWeather, longitude du lieu saisi = \n" + LocationWeatherClass.Property1[0].lon);
-                    // Debug.Log("Choix_LocationWeather, Pays du lieu saisi = \n" + LocationWeatherClass.Property1[0].country);
-                    // Debug.Log("Choix_LocationWeather, l'état du lieu saisi = \n" + LocationWeatherClass.Property1[0].local_names);
+                        //Debug.Log("Choix_ForecastWeather5days, City Name = \n" + ForecastWeather5daysClass.city.name);
+
+                    }
+                    else // Le nom d'une ville a été saisi | texteSaisiVraiouFaux == true
+                    {
+                        switch (compteur)
+                        {
+                            case 0:
+                                { // Objectif : récupérer Lat + Lon et réinjecter une seconde fois pour obtenir les données MTO.
+                                    Choix_CurrentWeather.Rootobject CurrentWeatherClass = JsonUtility.FromJson<Choix_CurrentWeather.Rootobject>(jsonStrings);
+                                    // On récupère les coordonnées Latitude & Longitude pour les réinjecter une seconde fois avec la bonne requête compléte.
+                                    coord_lon.text = "Longitude : \n" + CurrentWeatherClass.coord.lon;
+                                    coord_lat.text = "Latitude : \n" + CurrentWeatherClass.coord.lat;
+                                    Debug.Log("from DisplayMTO() case (0) - compteur = " + compteur);
+                                    Debug.Log(" from DisplayMTO() - Latitude et Longitude de la ville saisie : " + coord_lon.text + ", " + coord_lat.text);
+                                    compteur += 1;
+                                    //        //_choixMeteo.objectToFind3.gameObject.SetActive(true);
+                                    //        Choix_LocationWeather.Rootobject LocationWeatherClass = JsonUtility.FromJson<Choix_LocationWeather.Rootobject>("{\"Property1\":" + jsonStrings + "}");
+                                    //        Debug.Log("Choix_LocationWeather, nom du lieu saisi = \n" + LocationWeatherClass.Property1[0].name);
+                                    //        Debug.Log("Choix_LocationWeather, latitude du lieu saisi = \n" + LocationWeatherClass.Property1[0].lat);
+                                    //        Debug.Log("Choix_LocationWeather, longitude du lieu saisi = \n" + LocationWeatherClass.Property1[0].lon);
+                                    //        Debug.Log("Choix_LocationWeather, Pays du lieu saisi = \n" + LocationWeatherClass.Property1[0].country);
+                                    //        Debug.Log("Choix_LocationWeather, l'état du lieu saisi = \n" + LocationWeatherClass.Property1[0].local_names.fr);
+                                    string latitude5daysForecast = CurrentWeatherClass.coord.lat.ToString();
+                                    string longitude5daysForecast = CurrentWeatherClass.coord.lon.ToString();
+
+                                    //Debug.Log("From DisplayMTO() case (0) latitude5daysForecast = " + latitude5daysForecast);
+                                    //Debug.Log("From DisplayMTO() case (0) longitude5daysForecast = " + longitude5daysForecast);
+                                    //Debug.Log("from DisplayMTO() case (0) 'Compteur' = " + compteur);
+
+                                    ConstructURL2Send(latitude5daysForecast, longitude5daysForecast, compteur);
+                                }
+                                break;
+                            case 1:
+                                {
+                                    //Debug.Log("from DisplayMTO() case (1) - compteur = " + compteur);
+                                    compteur = 0;
+                                    // On peut afficher les données reçues, résultat de la seconde requète !
+                                    texteSaisiVraiouFaux = false;
+                                    city_coord_lat.text = latitude5daysForecast;
+                                    city_coord_lon.text = longitude5daysForecast;
+                                    Debug.Log("From DisplayMTO(); latitude5daysForecast = " + latitude5daysForecast + " longitude5daysForecast = " + longitude5daysForecast);
+                                    DisplayMTO();
+                                }
+                                break;
+                        }
+                    }
                 }
                 break;
         }
     }
-
-    //public TextMeshProUGUI cod_Internal_parameter;
-    //public TextMeshProUGUI message_Internal_parameter;
-    //public TextMeshProUGUI cnt_number_timestamps;
-    //public TextMeshProUGUI listdt_Time_of_data_forecasted;
-    //public TextMeshProUGUI list_main_temp;
-    //public TextMeshProUGUI list_main_feels_like;
-    //public TextMeshProUGUI list_main_temp_min;
-    //public TextMeshProUGUI list_main_temp_max;
-    //public TextMeshProUGUI list_main_pressure;
-    //public TextMeshProUGUI list_main_sea_level;
-    //public TextMeshProUGUI list_main_grnd_level;
-    //public TextMeshProUGUI list_main_humidity;
-    //public TextMeshProUGUI list_main_temp_kf;
-    //public TextMeshProUGUI list_weather_id;
-    //public TextMeshProUGUI list_weather_main;
-    //public TextMeshProUGUI list_weather_description;
-    //public TextMeshProUGUI list_weather_icon;
-    //public TextMeshProUGUI list_clouds_all;
-    //public TextMeshProUGUI list_wind_speed;
-    //public TextMeshProUGUI list_wind_deg;
-    //public TextMeshProUGUI list_wind_gust;
-    //public TextMeshProUGUI list_visibility;
-    //public TextMeshProUGUI list_pop;
-    //public TextMeshProUGUI list_rain_3h;
-    //public TextMeshProUGUI list_snow_3h;
-    //public TextMeshProUGUI list_sys_pod;
-    //public TextMeshProUGUI list_dt_txt;
-    //public TextMeshProUGUI city_id;
-    //public TextMeshProUGUI city_name;
-    //public TextMeshProUGUI city_coord_lat;
-    //public TextMeshProUGUI city_coord_lon;
-    //public TextMeshProUGUI city_country;
-    //public TextMeshProUGUI city_population;
-    //public TextMeshProUGUI city_timezone;
-    //public TextMeshProUGUI city_sunrise;
-    //public TextMeshProUGUI city_sunset;
-
 
     //private string ReadAPIKey()
     //{

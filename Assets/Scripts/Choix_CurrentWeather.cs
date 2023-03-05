@@ -17,10 +17,6 @@
         public Clouds clouds;
         public int dt;
         public Sys sys;
-        //public int timezone;
-        //public int id;
-        //public string name;
-        //public int cod;
     }
 
     [System.Serializable]
